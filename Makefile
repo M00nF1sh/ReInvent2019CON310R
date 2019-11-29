@@ -1,4 +1,4 @@
-TAG?=v4
+TAG?=v5
 REGISTRY?=m00nf1sh/reinvent2019con310r
 
 docker-build:
@@ -18,7 +18,7 @@ monitor:
 
 attack:
 	echo "GET http://$(shell kubectl get ingress/reinvent2019con310r -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')"	| \
-    vegeta attack -rate 100 -duration 1m | vegeta encode | tee result.bin | \
+    vegeta attack -rate 100 -duration 2m | vegeta encode | tee result.bin | \
     jaggr @count=rps \
           hist\[100,200,300,400,500\]:code \
           p25,p50,p95:latency | \

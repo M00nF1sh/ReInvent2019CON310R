@@ -26,6 +26,11 @@ spec:
         env:
         - name: MESSAGE
           value: The Doctor
+        lifecycle:
+          preStop:
+            exec:
+              command: ["/bin/sh", "-c", "sleep 40"]
+      terminationGracePeriodSeconds: 70
 ---
 apiVersion: v1
 kind: Service
