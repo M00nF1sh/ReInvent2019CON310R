@@ -1,6 +1,9 @@
 import logging
 import os
 import time
+import signal
+import threading
+import _thread
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 
@@ -34,10 +37,15 @@ class RequestHandler(BaseHTTPRequestHandler):
         logging.info("client_address:{client_address}, request_count:{request_count}, current_time:{current_time}".format(
             client_address=self.client_address, request_count=self._request_count, current_time=current_time))
 
+def sigterm_handler(*args):
+    logging.info('Received SIGTERM, gracefully shutdown now')
+    _thread.start_new_thread(lambda svc: svc.shutdown(), (httpd,))
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
+    signal.signal(signal.SIGTERM, sigterm_handler)
 
     server_address = ('0.0.0.0', 8080)
     httpd = ThreadingHTTPServer(server_address, RequestHandler)
+    httpd.daemon_threads = False
     httpd.serve_forever()

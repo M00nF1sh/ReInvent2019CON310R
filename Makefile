@@ -1,4 +1,4 @@
-TAG?=v1
+TAG?=v2
 REGISTRY?=m00nf1sh/reinvent2019con310r
 
 docker-build:
